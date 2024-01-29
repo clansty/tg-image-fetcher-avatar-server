@@ -9,3 +9,5 @@ build
 !.yarn/versions
 .history
 node_modules
+.env
+docker-compose.yaml

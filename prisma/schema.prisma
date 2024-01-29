@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id            Int      @id @default(autoincrement())
+  dcId          Int?
+  port          Int?
+  serverAddress String?
+  authKey       Bytes?
+  entities      Entity[]
+}
+
+model Entity {
+  id         Int      @id @default(autoincrement())
+  // 源代码里面大概支持 string 和 BigInteger，不如先全都存 String
+  entityId   String   @unique
+  sessionId  Int
+  session    Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  hash       String?
+  username   String?
+  phone      String?
+  name       String?
+  updateDate DateTime @updatedAt()
+  createDate DateTime @default(now())
+}
